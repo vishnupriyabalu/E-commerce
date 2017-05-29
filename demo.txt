@@ -1,0 +1,16 @@
+import java.util.*;
+class Demo
+{
+public static void main(String args[])
+{
+int count[]={1,4,2,3};
+set<Integer> set=new Hashset<Integer>();
+for(i=0;i<4;i++)
+{
+setadd(count[i]);
+}
+System.out.println(set);
+Treeset sortedset=new Treeset<Integer>(set);
+System.out.println("sortedlist"+sortedset);
+}}
+
