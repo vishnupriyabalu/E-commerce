@@ -1,0 +1,191 @@
+INDEX.JS[
+===========
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="LoginController" method="post">
+		<table align="right">
+			<thead bgcolor="pink">
+				<th colspan="2">Login</th>
+			</thead>
+			<tr bgcolor="gray">
+				<td>User Name</td>
+				<td><input type="text" name="uname" required /></td>
+			</tr>
+			<tr bgcolor="gray">
+				<td>Password</td>
+				<td><input type="password" name="passwd" required /></td>
+			</tr>
+			</tr>
+			<tr bgcolor="pink">
+				<td colspan="2"><center>
+						<input type="submit" value="SUBMIT" />
+					</center></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>
+========================================================================================================================
+LOGNCONTROLLER
+===============
+package controller;
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import model.Login;
+import dao.*;
+
+@WebServlet("/LoginController")
+public class Login_Controller extends HttpServlet 
+{
+	private static final long serialVersionUID = 1L;
+
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
+		
+		String username=request.getParameter("uname");
+		String password=request.getParameter("passwd");
+		
+		Login loginobj=new Login();
+		loginobj.setLogin(username);
+		loginobj.setPassword(password);
+		
+		try
+		{
+		
+	
+		
+		if(loginobj.isValidUser())
+		{
+			RequestDispatcher dispatch=request.getRequestDispatcher("success.jsp");
+			dispatch.forward(request,response);
+		}
+		else
+		{
+			RequestDispatcher dispatch=request.getRequestDispatcher("failure.jsp");
+			dispatch.forward(request,response);
+		}
+		
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		
+	}
+
+}
+==============================================================================================================================
+LOGINDAO
+==========
+package dao;
+
+
+	import model.*;
+	import java.sql.*;
+
+	public class LoginDAO 
+	{
+		Connection conn;
+		public LoginDAO()throws Exception
+		{
+			Class.forName("org.h2.Driver");
+			conn=DriverManager.getConnection("jdbc:h2:~/test","priya","priya");
+		}
+		
+		public boolean isValid(Login loginobj)throws Exception
+		{
+			PreparedStatement psmt=conn.prepareStatement("select * from mycust where custid=1 and password=priya");
+			
+			psmt.setString(1,loginobj.getLogin().trim());
+			psmt.setString(2, loginobj.getPassword().trim());
+			
+			ResultSet rs=psmt.executeQuery();
+			
+			if(rs.next())
+				return true;
+			else
+				return false;
+		}
+	}
+==========================================================================================================================================
+LOGIN.JAVA
+=============
+package model;
+
+public class Login {
+	
+		private String login,password;
+
+		public String getLogin() {
+			return login;
+		}
+
+		public void setLogin(String login) {
+			this.login = login;
+		}
+
+		public String getPassword() {
+			return password;
+		}
+
+		public void setPassword(String password) {
+			this.password = password;
+		
+		}
+public boolean isValidUser()
+{ 
+	if(login.equals("NIIT")&&(password.equals("12345")))
+	return true;
+else
+	return false;
+	
+}
+
+}
+===================================================================================================================================
+SUCCESS.JSP
+==============
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+	<h3>Welcome :::</h3>
+
+	<h3 align="center">User Home Page</h3>
+
+</body>
+</html>
+===========================================================================================================================
+FAILURE.JSP
+===============
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<h3 align="center">Login name and Password does not match</h3>
+	
+</body>
+</html>
+===============================================================================================
