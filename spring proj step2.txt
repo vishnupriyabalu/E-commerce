@@ -1,0 +1,117 @@
+categorydao
+=====================
+package com.mv.Maven1;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import com.mv.Maven1.model.Category;
+
+public class categorydao {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+AnnotationConfigApplicationContext context=new AnnotationConfigApplicationContext();
+context.scan("com.mv.Maven1");
+context.refresh();
+  categorydao categoryDao=(categorydao)context.getBean("categorydao");
+  Category category=new Category();
+  category.setCatname("glass");
+  category.setCatdesc("crystals play a valuable role in gift article");
+  categoryDao.insertCategory(category);
+}
+}
+
+categorydao testcase
+==================
+package com.mv.Maven1.dao;
+
+import org.hibernate.SessionFactory;
+
+import com.mv.Maven1.model.Category;
+
+public class Categorydao {
+SessionFactory sessionFactory;
+public Categorydao(SessionFactory sessionFactory) {
+	// TODO Auto-generated constructor stub
+ this.sessionFactory=sessionFactory;
+}
+public void insertCategory(Category category) {
+	sessionFactory.getCurrentSession().saveOrUpdate(category);
+}
+}
+
+supplier
+============
+package com.mv.Maven1.model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table
+public class supplier {
+@Id
+@GeneratedValue
+int suppid;
+String suppname;
+String address;
+public int getSuppid() {
+	return suppid;
+}
+public void setSuppid(int suppid) {
+	this.suppid = suppid;
+}
+public String getSuppname() {
+	return suppname;
+}
+public void setSuppname(String suppname) {
+	this.suppname = suppname;
+}
+public String getAddress() {
+	return address;
+}
+public void setAddress(String address) {
+	this.address = address;
+}
+}
+ 
+category
+===============
+package com.mv.Maven1.model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table
+public class Category 
+{
+@Id
+@GeneratedValue
+int catid;
+ String catname;
+ String catdesc;
+public int getCatid() {
+	return catid;
+}
+public void setCatid(int catid) {
+	this.catid = catid;
+}
+public String getCatname() {
+	return catname;
+}
+public void setCatname(String catname) {
+	this.catname = catname;
+}
+public String getCatdesc() {
+	return catdesc;
+}
+public void setCatdesc(String catdesc) {
+	this.catdesc = catdesc;
+}
+ 
+}
